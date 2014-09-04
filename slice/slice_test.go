@@ -86,6 +86,24 @@ func TestFilter(t *testing.T) {
 	}
 }
 
+func TestIndex(t *testing.T) {
+	i1 := Index([]int{1, 2, 3, 4, 6}, func(i int) bool { return i%3 == 0 })
+	i2 := Index([]int{1, 2, 3, 4}, func(i int) bool { return i%5 == 0 })
+
+	if i1 != 2 && i2 != -1 {
+		t.Fatal()
+	}
+}
+
+func TestIndexLast(t *testing.T) {
+	i1 := IndexLast([]int{1, 2, 3, 4, 6}, func(i int) bool { return i%3 == 0 })
+	i2 := IndexLast([]int{1, 2, 3, 4}, func(i int) bool { return i%5 == 0 })
+
+	if i1 != 4 && i2 != -1 {
+		t.Fatal()
+	}
+}
+
 func TestFind(t *testing.T) {
 	ok1, r1 := Find([]int{1, 2, 3, 4, 6}, func(i int) bool { return i%3 == 0 })
 	ok2, _ := Find([]int{1, 2, 3, 4}, func(i int) bool { return i%5 == 0 })

@@ -2,6 +2,9 @@
 // Use of this source code is governed by a MIT/X11
 // license that can be found in the LICENSE file.
 
+// Useful functions for handle slice.
+// NOTE: function will panic if the argument type is not
+// correct at runtime.
 package slice
 
 import (
@@ -101,6 +104,38 @@ func Filter(i interface{}, f interface{}) []interface{} {
 		}
 	}
 	return result
+}
+
+// Get first element index satisfy function f
+// NOTE: Panic if i is not slice or slice pointer, f type is not func or func pointer.
+// Return -1, if no element satisfy.
+func Index(i interface{}, f interface{}) int {
+	v1 := reflectSlice(i)
+	v2 := reflectFunc(f)
+
+	for i := 0; i < v1.Len(); i++ {
+		e := v1.Index(i)
+		if v2.Call([]reflect.Value{e})[0].Bool() {
+			return i
+		}
+	}
+	return -1
+}
+
+// Get first element index satisfy function f in reverse order.
+// NOTE: Panic if i is not slice or slice pointer, f type is not func or func pointer.
+// Return -1, if no element satisfy.
+func IndexLast(i interface{}, f interface{}) int {
+	v1 := reflectSlice(i)
+	v2 := reflectFunc(f)
+
+	for i := v1.Len() - 1; i > 0; i-- {
+		e := v1.Index(i)
+		if v2.Call([]reflect.Value{e})[0].Bool() {
+			return i
+		}
+	}
+	return -1
 }
 
 // Find first element satisfy function f
